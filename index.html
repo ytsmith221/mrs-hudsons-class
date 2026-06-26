@@ -421,7 +421,7 @@
       <div class="flex justify-between items-center" style="margin-top:12px;">
         <span class="muted small" id="post-composer-count">0 / 500</span>
         <div class="flex items-center gap-sm">
-          <button class="mic-btn" id="composer-mic-btn" onclick="startVoice('post-composer-text', this)" title="Voice to text">🎙</button>
+          <button class="mic-btn" id="composer-mic-btn" onclick="startVoice('post-composer-text', this)" title="Voice to text" style="display:none;">🎙</button>
           <button class="btn btn-primary btn-sm" onclick="submitFeedPost()">Post</button>
         </div>
       </div>
@@ -498,7 +498,7 @@
     <div class="comment-box">
       <textarea style="min-height:70px;font-size:14px;" placeholder="Share something with the community…" id="new-comment-text"></textarea>
       <div class="flex items-center justify-between" style="margin-top:8px;">
-        <button class="mic-btn" id="comment-mic-btn" onclick="startVoice('new-comment-text', this)" title="Voice to text">🎙</button>
+        <button class="mic-btn" id="comment-mic-btn" onclick="startVoice('new-comment-text', this)" title="Voice to text" style="display:none;">🎙</button>
         <button class="btn btn-primary btn-sm" onclick="submitComment()">Post</button>
       </div>
     </div>
@@ -533,12 +533,14 @@
   </div>
   <div class="editor-footer">
     <span class="muted small" id="word-count">0 words</span>
-    <button class="mic-btn" id="editor-mic-btn" onclick="startVoice('journal-textarea', this)" title="Voice to text">🎙</button>
+    <button class="mic-btn" id="editor-mic-btn" onclick="startVoice('journal-textarea', this)" title="Voice to text" style="display:none;">🎙</button>
   </div>
 </div>
 
 <script>
 // ─── APP CONFIG ─────────────────────────────────────────
+const FEATURES = { voiceInput: false };
+
 const APP = {
   name: "Mrs. Hudson's Class",
   authorLabel: 'Instructor',
@@ -745,6 +747,12 @@ function enterApp() {
   document.getElementById('main-app').style.flexDirection = 'column';
   renderAll();
   updateNotifDot();
+  if (FEATURES.voiceInput) {
+    ['editor-mic-btn','composer-mic-btn','comment-mic-btn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = '';
+    });
+  }
 }
 
 // ─── NAVIGATION ─────────────────────────────────────────
@@ -1033,7 +1041,7 @@ function renderFeed() {
           <div class="flex gap-sm items-center" style="margin-top:8px;">
             <div class="avatar" style="width:26px;height:26px;font-size:10px;">${getInitials(currentUserName)}</div>
             <input type="text" id="feed-comment-input-${post.id}" placeholder="Add a comment…" style="font-size:13px;padding:8px 12px;flex:1;" onkeydown="if(event.key==='Enter')addFeedComment('${post.id}',this)" />
-            <button class="mic-btn" onclick="startVoice('feed-comment-input-${post.id}',this)" title="Voice to text">🎙</button>
+            ${FEATURES.voiceInput ? `<button class="mic-btn" onclick="startVoice('feed-comment-input-${post.id}',this)" title="Voice to text">🎙</button>` : ''}
           </div>
         </div>
       </div>
