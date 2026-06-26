@@ -197,6 +197,12 @@
 
   svg { display: inline-block; vertical-align: middle; }
 
+  /* MIC BUTTON */
+  .mic-btn { background:none;border:none;cursor:pointer;font-size:16px;padding:4px 6px;border-radius:8px;color:var(--muted);transition:background .15s;line-height:1;flex-shrink:0; }
+  .mic-btn:hover { background:var(--sage-100); }
+  .mic-btn.recording { color:var(--bark-500);animation:mic-pulse 1s infinite; }
+  @keyframes mic-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
   .post-menu { position:relative; margin-left:auto; }
   .post-menu-btn { background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);padding:4px 8px;border-radius:6px;line-height:1; }
   .post-menu-dropdown { display:none;position:absolute;right:0;top:28px;background:#fff;border:1px solid var(--sage-100);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:50;min-width:120px;overflow:hidden; }
@@ -414,8 +420,25 @@
       <textarea id="post-composer-text" placeholder="Share a thought with the class…" style="min-height:120px;font-size:15px;border:1px solid var(--sage-200);border-radius:12px;padding:12px 14px;background:#fff;"></textarea>
       <div class="flex justify-between items-center" style="margin-top:12px;">
         <span class="muted small" id="post-composer-count">0 / 500</span>
-        <button class="btn btn-primary btn-sm" onclick="submitFeedPost()">Post</button>
+        <div class="flex items-center gap-sm">
+          <button class="mic-btn" id="composer-mic-btn" onclick="startVoice('post-composer-text', this)" title="Voice to text">🎙</button>
+          <button class="btn btn-primary btn-sm" onclick="submitFeedPost()">Post</button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- SOCRATIC COACH MODAL -->
+  <div id="socratic-modal" style="display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.4);align-items:flex-end;">
+    <div style="background:var(--cream);border-radius:20px 20px 0 0;padding:22px 18px 40px;width:100%;max-width:430px;margin:0 auto;">
+      <div class="flex items-center justify-between" style="margin-bottom:4px;">
+        <div>
+          <span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span>
+          <p class="muted small" style="margin-top:2px;">Push your thinking a little further</p>
+        </div>
+        <button onclick="closeSocraticCoach()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);">✕</button>
+      </div>
+      <div id="socratic-content" style="margin-top:14px;"></div>
     </div>
   </div>
 
@@ -474,7 +497,10 @@
   <div class="detail-content" id="detail-board-content" style="display:none;">
     <div class="comment-box">
       <textarea style="min-height:70px;font-size:14px;" placeholder="Share something with the community…" id="new-comment-text"></textarea>
-      <div class="text-right"><button class="btn btn-primary btn-sm" onclick="submitComment()">Post</button></div>
+      <div class="flex items-center justify-between" style="margin-top:8px;">
+        <button class="mic-btn" id="comment-mic-btn" onclick="startVoice('new-comment-text', this)" title="Voice to text">🎙</button>
+        <button class="btn btn-primary btn-sm" onclick="submitComment()">Post</button>
+      </div>
     </div>
     <div id="comments-list"></div>
   </div>
@@ -507,6 +533,7 @@
   </div>
   <div class="editor-footer">
     <span class="muted small" id="word-count">0 words</span>
+    <button class="mic-btn" id="editor-mic-btn" onclick="startVoice('journal-textarea', this)" title="Voice to text">🎙</button>
   </div>
 </div>
 
@@ -545,6 +572,7 @@ const planData = {
     description: 'Writing prompts for our study of Golding\'s novel. Explore civilization, savagery, and human nature.',
     author: 'Mrs. Hudson',
     color: 'sage',
+    socratic: true,
     prompts: [
       { id:'lf1', title:'Before we begin: What would happen?', body:'Before you read a single page: imagine a group of kids your age stranded on an island without any adults.\n\nWhat do you think would happen? Who would take charge? Would there be rules? Write your prediction — you\'ll come back to it at the end.', week:1, tags:['Lord of the Flies','Pre-Reading'] },
       { id:'lf2', title:'The conch shell: What does it mean?', body:'In the early chapters, the conch shell becomes the central symbol of order and democratic rule.\n\nHow does Golding use the conch? What does it allow the boys to do that they couldn\'t do otherwise? What might the conch represent in the real world?', week:2, tags:['Lord of the Flies','Chapters 1–3','Symbolism'] },
@@ -831,7 +859,7 @@ function renderPromptsList() {
       const pct = total ? Math.round((done/total)*100) : 0;
       return `<div class="card" style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-          <div><div style="font-weight:600;font-size:15px;">${plan.title}</div>
+          <div><div style="font-weight:600;font-size:15px;">${plan.title}${plan.socratic ? ' <span class="badge badge-earth" style="font-size:10px;vertical-align:middle;">🧠 Socratic</span>' : ''}</div>
           <div class="muted small" style="margin-top:2px;">${done}/${total} written</div></div>
           <button onclick="toggleJoinPlan('${plan.id}')" style="background:none;border:1px solid var(--sage-200);border-radius:8px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--muted);font-family:'Inter',sans-serif;flex-shrink:0;">Leave</button>
         </div>
@@ -862,7 +890,7 @@ function renderPromptsList() {
       return `<div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="openPlanDetail('${plan.id}')">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
           <div style="flex:1;">
-            <div style="font-weight:600;font-size:15px;margin-bottom:4px;">${plan.title}</div>
+            <div style="font-weight:600;font-size:15px;margin-bottom:4px;">${plan.title}${plan.socratic ? ' <span class="badge badge-earth" style="font-size:10px;vertical-align:middle;">🧠 Socratic</span>' : ''}</div>
             <div class="muted small lh" style="margin-bottom:6px;">${plan.description}</div>
             <div class="muted small">${plan.author} · ${total} prompts${isJoined && done > 0 ? ' · '+done+'/'+total+' written' : ''}</div>
           </div>
@@ -1004,7 +1032,8 @@ function renderFeed() {
             </div>`).join('')}
           <div class="flex gap-sm items-center" style="margin-top:8px;">
             <div class="avatar" style="width:26px;height:26px;font-size:10px;">${getInitials(currentUserName)}</div>
-            <input type="text" id="feed-comment-input-${post.id}" placeholder="Add a comment…" style="font-size:13px;padding:8px 12px;" onkeydown="if(event.key==='Enter')addFeedComment('${post.id}',this)" />
+            <input type="text" id="feed-comment-input-${post.id}" placeholder="Add a comment…" style="font-size:13px;padding:8px 12px;flex:1;" onkeydown="if(event.key==='Enter')addFeedComment('${post.id}',this)" />
+            <button class="mic-btn" onclick="startVoice('feed-comment-input-${post.id}',this)" title="Voice to text">🎙</button>
           </div>
         </div>
       </div>
@@ -1162,6 +1191,10 @@ function postEditorEntry() {
   updateStatCounts();
 }
 function closeEditor(share) {
+  const wasSocratic = isPromptSocratic(editorPromptId);
+  const socraticPromptId = editorPromptId;
+  const entryBody = document.getElementById('journal-textarea').value.trim();
+
   saveEntry(editorPromptId, editorEntryId, true);
   if (share) {
     // Mark the last saved entry as shared
@@ -1178,6 +1211,10 @@ function closeEditor(share) {
   updateJournalStats();
   updateStatCounts();
   updateHomeContinueSection();
+
+  if (wasSocratic && entryBody && !share) {
+    openSocraticCoach(socraticPromptId, entryBody);
+  }
 }
 
 function saveEntry(promptId, entryId, isFinal) {
@@ -1582,7 +1619,7 @@ function openPlanDetail(planId) {
   const isJoined = joinedPlans.has(planId);
   const colorMap = { sage:'linear-gradient(135deg,#3c5435,#293924)', bark:'linear-gradient(135deg,#9a6139,#663e28)', earth:'linear-gradient(135deg,#7a4a2e,#5c3520)' };
   document.getElementById('plan-detail-hero').style.background = colorMap[plan.color] || colorMap.sage;
-  document.getElementById('plan-detail-label').textContent = isJoined ? 'Joined ✓' : 'Available Plan';
+  document.getElementById('plan-detail-label').textContent = (isJoined ? 'Joined ✓' : 'Available Plan') + (plan.socratic ? ' · 🧠 Socratic' : '');
   document.getElementById('plan-detail-title').textContent = plan.title;
   document.getElementById('plan-detail-desc').textContent = plan.description;
   document.getElementById('plan-detail-meta').textContent = plan.author + ' · ' + plan.prompts.length + ' prompts';
@@ -1666,6 +1703,95 @@ function sharePlan(planId) {
 }
 
 // ─── PLANS (now in Prompts tab) ─────────────────────────
+
+// ─── VOICE TO TEXT ──────────────────────────────────────
+let activeRecognition = null;
+
+function startVoice(targetId, btn) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice input not supported in this browser'); return; }
+
+  if (activeRecognition) {
+    activeRecognition.stop();
+    return;
+  }
+
+  const rec = new SR();
+  activeRecognition = rec;
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.lang = 'en-US';
+
+  if (btn) btn.classList.add('recording');
+
+  rec.onresult = e => {
+    const el = document.getElementById(targetId);
+    if (el) {
+      const transcript = e.results[0][0].transcript;
+      el.value += (el.value && !el.value.endsWith(' ') ? ' ' : '') + transcript;
+      el.dispatchEvent(new Event('input'));
+    }
+  };
+
+  rec.onend = () => {
+    activeRecognition = null;
+    if (btn) btn.classList.remove('recording');
+  };
+
+  rec.onerror = () => {
+    activeRecognition = null;
+    if (btn) btn.classList.remove('recording');
+    showToast('Voice capture failed — try again');
+  };
+
+  rec.start();
+}
+
+// ─── SOCRATIC COACH ─────────────────────────────────────
+function isPromptSocratic(promptId) {
+  if (!promptId) return false;
+  for (const plan of Object.values(planData)) {
+    if (plan.socratic && plan.prompts.some(p => p.id === promptId)) return true;
+  }
+  return false;
+}
+
+function closeSocraticCoach() {
+  document.getElementById('socratic-modal').style.display = 'none';
+}
+
+async function openSocraticCoach(promptId, entryText) {
+  const modal = document.getElementById('socratic-modal');
+  const content = document.getElementById('socratic-content');
+  modal.style.display = 'flex';
+  content.innerHTML = '<p class="muted small" style="text-align:center;padding:16px 0;">Thinking…</p>';
+
+  let promptText = '';
+  for (const plan of Object.values(planData)) {
+    const p = plan.prompts.find(x => x.id === promptId);
+    if (p) { promptText = p.title; break; }
+  }
+
+  try {
+    const res = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ promptText, entryText })
+    });
+    const data = await res.json();
+    if (data.questions) {
+      const lines = data.questions.split('\n').filter(l => l.trim());
+      content.innerHTML = lines.map(l => `
+        <div style="background:#fff;border:1px solid var(--sage-100);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <p style="font-size:14px;line-height:1.65;color:var(--sage-900);">${l.replace(/^\d+\.\s*/,'')}</p>
+        </div>`).join('');
+    } else {
+      content.innerHTML = '<p class="muted small" style="text-align:center;">Could not generate questions — try again.</p>';
+    }
+  } catch {
+    content.innerHTML = '<p class="muted small" style="text-align:center;">Could not connect — check your network.</p>';
+  }
+}
 
 // ─── INIT ───────────────────────────────────────────────
 // Show auth first, app renders on login
