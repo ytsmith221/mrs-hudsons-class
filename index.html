@@ -1787,17 +1787,26 @@ async function openSocraticCoach(promptId, entryText) {
       body: JSON.stringify({ promptText, entryText })
     });
     const data = await res.json();
-    if (data.questions) {
+    if (!res.ok || data.error) {
+      const msg = data.error || `HTTP ${res.status}`;
+      content.innerHTML = `<div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;">
+        <p style="font-size:13px;font-weight:600;color:#c0392b;margin-bottom:4px;">Error</p>
+        <p style="font-size:13px;color:#c0392b;line-height:1.5;">${msg}</p>
+      </div>`;
+    } else if (data.questions) {
       const lines = data.questions.split('\n').filter(l => l.trim());
       content.innerHTML = lines.map(l => `
         <div style="background:#fff;border:1px solid var(--sage-100);border-radius:12px;padding:14px;margin-bottom:10px;">
           <p style="font-size:14px;line-height:1.65;color:var(--sage-900);">${l.replace(/^\d+\.\s*/,'')}</p>
         </div>`).join('');
     } else {
-      content.innerHTML = '<p class="muted small" style="text-align:center;">Could not generate questions — try again.</p>';
+      content.innerHTML = '<p class="muted small" style="text-align:center;">No questions returned — try again.</p>';
     }
-  } catch {
-    content.innerHTML = '<p class="muted small" style="text-align:center;">Could not connect — check your network.</p>';
+  } catch (e) {
+    content.innerHTML = `<div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;">
+      <p style="font-size:13px;font-weight:600;color:#c0392b;margin-bottom:4px;">Connection error</p>
+      <p style="font-size:13px;color:#c0392b;line-height:1.5;">${e.message || 'Could not reach the server — check your network.'}</p>
+    </div>`;
   }
 }
 
