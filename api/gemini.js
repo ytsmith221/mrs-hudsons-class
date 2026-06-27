@@ -31,11 +31,13 @@ Student's response:
     }
   );
 
+  const data = await response.json();
+
   if (!response.ok) {
-    return res.status(502).json({ error: 'Gemini API error' });
+    const detail = data?.error?.message || `HTTP ${response.status}`;
+    return res.status(502).json({ error: `Gemini API error: ${detail}` });
   }
 
-  const data = await response.json();
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   return res.json({ questions: text });
 }
