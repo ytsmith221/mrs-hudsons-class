@@ -120,6 +120,9 @@
   textarea { width: 100%; background: transparent; border: none; outline: none; resize: none; font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.75; color: var(--text); min-height: 60vh; }
   textarea::placeholder { color: #b8b0a8; }
   .editor-footer { padding: 12px 18px; border-top: 1px solid var(--sage-100); display: flex; align-items: center; justify-content: space-between; background: var(--cream); }
+  .editor-menu-item { display: block; width: 100%; text-align: left; padding: 11px 16px; border: none; background: none; font-size: 13px; font-family: 'Inter', sans-serif; cursor: pointer; color: var(--text); line-height: 1.3; }
+  .editor-menu-item + .editor-menu-item { border-top: 1px solid var(--sage-50); }
+  .editor-menu-item:hover { background: var(--sage-50); }
 
   /* PROMPT DETAIL */
   .detail-wrap { position: fixed; inset: 0; background: var(--cream); z-index: 90; display: none; flex-direction: column; width: 100%; height: 100vh; left: 0; transform: none; max-width: none; overflow-y: auto; }
@@ -511,14 +514,16 @@
   <div class="editor-header">
     <button onclick="closeEditor(false)" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;">← Back</button>
     <span id="save-status" class="muted small" style="opacity:0;transition:opacity .3s;">✓ Saved</span>
-    <div style="display:flex;align-items:center;gap:8px;position:relative;">
-      <button id="socratic-ask-btn" onclick="submitToSocraticCoach()" style="display:none;background:var(--bark-400);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:6px 14px;border-radius:10px;">🧠 Ask Coach</button>
-      <button onclick="closeEditor(false)" style="background:var(--sage-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:6px 14px 6px 16px;border-radius:10px 0 0 10px;">Done</button>
-      <button id="editor-done-arrow" onclick="toggleEditorMenu()" style="background:var(--sage-700);color:#fff;border:none;border-left:1px solid var(--sage-800);cursor:pointer;padding:6px 10px;border-radius:0 10px 10px 0;font-size:11px;">▾</button>
-      <div id="editor-done-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--sage-200);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:10;min-width:160px;overflow:hidden;">
-        <button onclick="closeEditor(false);toggleEditorMenu();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">💾 Save & close</button>
-        <button onclick="shareEditorEntry();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">↗ Share entry</button>
-        <button onclick="postEditorEntry();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">💬 Post to Discussion</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="socratic-ask-btn" onclick="submitToSocraticCoach()" style="display:none;background:var(--bark-400);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:7px 14px;border-radius:10px;line-height:1.2;">🧠 Ask Coach</button>
+      <div style="position:relative;display:flex;align-items:stretch;">
+        <button onclick="closeEditor(false)" style="background:var(--sage-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:7px 14px;border-radius:10px 0 0 10px;line-height:1.2;white-space:nowrap;">Done</button>
+        <button id="editor-done-arrow" onclick="toggleEditorMenu()" style="background:var(--sage-600);color:#fff;border:none;border-left:1px solid rgba(255,255,255,0.25);cursor:pointer;padding:7px 9px;border-radius:0 10px 10px 0;font-size:10px;line-height:1.2;">▾</button>
+        <div id="editor-done-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--sage-200);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.13);z-index:10;min-width:180px;overflow:hidden;">
+          <button onclick="closeEditor(false);toggleEditorMenu();" class="editor-menu-item">💾 Save &amp; close</button>
+          <button onclick="shareEditorEntry();" class="editor-menu-item">↗ Share entry</button>
+          <button onclick="postEditorEntry();" class="editor-menu-item">💬 Post to Discussion</button>
+        </div>
       </div>
     </div>
   </div>
