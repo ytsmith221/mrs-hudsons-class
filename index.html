@@ -1498,7 +1498,7 @@ async function submitToSocraticCoach() {
       editorSocraticUsed = true;
       saveEntry(editorPromptId, editorEntryId);
       const lines = data.questions.split('\n').filter(l => l.trim());
-      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span><span class="muted small">— revise your response below</span></div>` +
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span><span class="muted small">— think about the questions below and revise your response before submitting</span></div>` +
         lines.map(l => `<div style="background:var(--cream);border:1px solid var(--sage-100);border-radius:12px;padding:12px 14px;margin-bottom:8px;"><p style="font-size:14px;line-height:1.65;color:var(--sage-900);">${l.replace(/^\d+\.\s*/,'')}</p></div>`).join('');
     } else {
       panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span></div><p class="muted small" style="text-align:center;">No questions returned — try again.</p>`;
