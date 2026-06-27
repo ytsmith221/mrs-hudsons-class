@@ -18,7 +18,7 @@
     --sage-50: #f4f7f3; --sage-100: #e6ede4; --sage-200: #cedbc9;
     --sage-500: #5C7A52; --sage-600: #4a6741; --sage-700: #3c5435;
     --sage-800: #32442c; --sage-900: #293924;
-    --bark-100: #f3e8d5; --bark-200: #e6cfaa; --bark-500: #b5784a; --bark-600: #9a6139;
+    --bark-100: #f3e8d5; --bark-200: #e6cfaa; --bark-500: #b5784a; --bark-600: #9a6139; --bark-700: #7a4e2b;
     --earth-100: #f5efe6; --earth-700: #8b5836;
     --cream: #FAF7F2; --parchment: #F0E9DC;
     --text: #2C2416; --muted: #7a6e64;
@@ -39,7 +39,7 @@
 
   /* BOTTOM NAV */
   .bottomnav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-top: 1px solid var(--sage-100); padding: 0; height: 70px; display: flex; }
-  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 14px; background: none; border: none; cursor: pointer; color: var(--sage-200); font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; }
+  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 14px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; }
   .nav-btn.active { color: var(--sage-600); }
   .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .nav-btn.active svg { stroke-width: 2.2; }
@@ -64,7 +64,7 @@
   .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
   .badge-earth { background: var(--earth-100); color: var(--earth-700); }
   .badge-sage { background: var(--sage-100); color: var(--sage-600); }
-  .badge-bark { background: var(--bark-100); color: var(--bark-500); border: 1px solid var(--bark-200); }
+  .badge-bark { background: var(--bark-100); color: var(--bark-700); border: 1px solid var(--bark-200); }
   .badge-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--bark-500); display: inline-block; }
 
   /* BUTTON */
@@ -89,7 +89,7 @@
   .flex-1 { flex: 1; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .text-cream { color: var(--cream); }
-  .text-sage { color: var(--sage-500); }
+  .text-sage { color: var(--sage-600); }
   .italic { font-style: italic; }
   .lh { line-height: 1.65; }
   .clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -109,7 +109,7 @@
 
   /* AVATAR */
   .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--earth-100); color: var(--earth-700); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
-  .avatar-author { background: var(--bark-100); color: var(--bark-600); }
+  .avatar-author { background: var(--bark-100); color: var(--bark-700); }
 
   /* JOURNAL EDITOR */
   .editor-wrap { position: fixed; inset: 0; background: var(--cream); z-index: 100; display: none; flex-direction: column; width: 100%; height: 100vh; left: 0; transform: none; max-width: none; }
@@ -120,6 +120,9 @@
   textarea { width: 100%; background: transparent; border: none; outline: none; resize: none; font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.75; color: var(--text); min-height: 60vh; }
   textarea::placeholder { color: #b8b0a8; }
   .editor-footer { padding: 12px 18px; border-top: 1px solid var(--sage-100); display: flex; align-items: center; justify-content: space-between; background: var(--cream); }
+  .editor-menu-item { display: block; width: 100%; text-align: left; padding: 11px 16px; border: none; background: none; font-size: 13px; font-family: 'Inter', sans-serif; cursor: pointer; color: var(--text); line-height: 1.3; }
+  .editor-menu-item + .editor-menu-item { border-top: 1px solid var(--sage-50); }
+  .editor-menu-item:hover { background: var(--sage-50); }
 
   /* PROMPT DETAIL */
   .detail-wrap { position: fixed; inset: 0; background: var(--cream); z-index: 90; display: none; flex-direction: column; width: 100%; height: 100vh; left: 0; transform: none; max-width: none; overflow-y: auto; }
@@ -142,7 +145,7 @@
   .post-img { width: 100%; max-height: 260px; object-fit: cover; }
   .post-actions { padding: 8px 14px 12px; border-top: 1px solid var(--sage-50); display: flex; gap: 16px; }
   .action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--muted); font-family: 'Inter', sans-serif; padding: 4px 0; transition: color .15s; }
-  .action-btn.liked { color: var(--bark-500); }
+  .action-btn.liked { color: var(--bark-600); }
   .post-comments { background: #f9f7f4; border-top: 1px solid var(--sage-50); padding: 12px 14px; }
   .comment-bubble { background: #fff; border: 1px solid var(--sage-100); border-radius: 12px; padding: 8px 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
   .audio-pill { margin: 0 14px 12px; background: var(--sage-50); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
@@ -164,7 +167,7 @@
   .prompt-comment { padding: 8px 0; font-size: 12px; }
   .prompt-comment-author { font-weight: 500; margin-bottom: 2px; }
   .prompt-comment-text { color: var(--sage-700); font-size: 12px; line-height: 1.5; }
-  .comment-toggle { min-width: 24px; padding: 4px; font-size: 12px; background: none; border: none; cursor: pointer; color: var(--sage-500); }
+  .comment-toggle { min-width: 24px; padding: 4px; font-size: 12px; background: none; border: none; cursor: pointer; color: var(--sage-600); }
 
   /* STATUS EDIT */
   .editable-status { cursor: pointer; padding: 4px 8px; margin: 0 -4px; border-radius: 6px; transition: background .15s; }
@@ -244,7 +247,7 @@
 <!-- UPDATE BANNER -->
 <div id="update-banner" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:999;background:var(--sage-800);color:#fff;padding:12px 16px;display:none;align-items:center;justify-content:space-between;gap:12px;">
   <span style="font-size:13px;">📖 A new version is available.</span>
-  <button onclick="applyUpdate()" style="background:var(--sage-500);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;">Update now</button>
+  <button onclick="applyUpdate()" style="background:var(--sage-600);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;">Update now</button>
 </div>
 
 <!-- MAIN APP -->
@@ -433,7 +436,7 @@
     <div style="background:var(--cream);border-radius:20px 20px 0 0;padding:22px 18px 40px;width:100%;max-width:430px;margin:0 auto;">
       <div class="flex items-center justify-between" style="margin-bottom:4px;">
         <div>
-          <span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span>
+          <span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span>
           <p class="muted small" style="margin-top:2px;">Push your thinking a little further</p>
         </div>
         <button onclick="closeSocraticCoach()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);">✕</button>
@@ -490,8 +493,7 @@
     <div style="background:#fff;border:1px solid var(--sage-100);border-radius:14px;padding:16px;margin-bottom:14px;" id="detail-body"></div>
     <button class="btn btn-primary btn-full" id="detail-write-btn">🪶 Start writing</button>
     <div style="display:flex;gap:10px;margin-top:10px;">
-      <button class="btn btn-secondary flex-1 btn-sm" onclick="alert('Sharing coming soon!')">Share prompt</button>
-      <button class="btn btn-secondary flex-1 btn-sm" onclick="switchDetailTab('board')">Join discussion</button>
+      <button class="btn btn-secondary btn-full btn-sm" onclick="shareCurrentPrompt()">Share prompt</button>
     </div>
   </div>
   <div class="detail-content" id="detail-board-content" style="display:none;">
@@ -512,13 +514,16 @@
   <div class="editor-header">
     <button onclick="closeEditor(false)" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;">← Back</button>
     <span id="save-status" class="muted small" style="opacity:0;transition:opacity .3s;">✓ Saved</span>
-    <div style="display:flex;align-items:center;position:relative;">
-      <button onclick="closeEditor(false)" style="background:var(--sage-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:6px 14px 6px 16px;border-radius:10px 0 0 10px;">Done</button>
-      <button id="editor-done-arrow" onclick="toggleEditorMenu()" style="background:var(--sage-700);color:#fff;border:none;border-left:1px solid var(--sage-800);cursor:pointer;padding:6px 10px;border-radius:0 10px 10px 0;font-size:11px;">▾</button>
-      <div id="editor-done-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--sage-200);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:10;min-width:160px;overflow:hidden;">
-        <button onclick="closeEditor(false);toggleEditorMenu();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">💾 Save & close</button>
-        <button onclick="shareEditorEntry();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">↗ Share entry</button>
-        <button onclick="postEditorEntry();" style="display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text);">💬 Post to Discussion</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="socratic-ask-btn" onclick="submitToSocraticCoach()" style="display:none;background:var(--bark-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:7px 14px;border-radius:10px;line-height:1.2;">🧠 Ask Coach</button>
+      <div style="position:relative;display:flex;align-items:stretch;">
+        <button onclick="closeEditor(false)" style="background:var(--sage-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:7px 14px;border-radius:10px 0 0 10px;line-height:1.2;white-space:nowrap;">Done</button>
+        <button id="editor-done-arrow" onclick="toggleEditorMenu()" style="background:var(--sage-600);color:#fff;border:none;border-left:1px solid rgba(255,255,255,0.25);cursor:pointer;padding:7px 9px;border-radius:0 10px 10px 0;font-size:10px;line-height:1.2;">▾</button>
+        <div id="editor-done-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--sage-200);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.13);z-index:10;min-width:180px;overflow:hidden;">
+          <button onclick="closeEditor(false);toggleEditorMenu();" class="editor-menu-item">💾 Save &amp; close</button>
+          <button onclick="shareEditorEntry();" class="editor-menu-item">↗ Share entry</button>
+          <button onclick="postEditorEntry();" class="editor-menu-item">💬 Post to Discussion</button>
+        </div>
       </div>
     </div>
   </div>
@@ -530,6 +535,7 @@
     <input id="journal-title" type="text" placeholder="Title (optional)" style="width:100%;box-sizing:border-box;border:none;border-bottom:1px solid var(--sage-200);background:transparent;font-size:16px;font-weight:600;font-family:'Inter',sans-serif;padding:8px 0;margin-bottom:8px;color:var(--text);outline:none;" />
     <input id="journal-tags" type="text" placeholder="Tags (comma-separated, optional)" style="width:100%;box-sizing:border-box;border:none;border-bottom:1px solid var(--sage-200);background:transparent;font-size:13px;font-family:'Inter',sans-serif;padding:6px 0;margin-bottom:8px;color:var(--text-muted);outline:none;" />
     <textarea id="journal-textarea" placeholder="Begin here. First drafts are just thinking on paper."></textarea>
+    <div id="socratic-inline-panel" style="display:none;margin-top:14px;border-top:1px solid var(--sage-100);padding-top:14px;"></div>
   </div>
   <div class="editor-footer">
     <span class="muted small" id="word-count">0 words</span>
@@ -698,6 +704,7 @@ let currentPromptId = null;
 let saveTimer = null;
 let editorPromptId = null;
 let editorEntryId = null;
+let editorSocraticUsed = false;
 let localComments = { br1: [...(boardComments.br1||[])], br2: [...(boardComments.br2||[])] };
 let likedPosts = {};
 let likedComments = {};
@@ -879,7 +886,7 @@ function renderPromptsList() {
             return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:${written?'var(--sage-50)':'#fff'};border:1px solid var(--sage-100);cursor:pointer;" onclick="openPlanPrompt('${p.id}')">
               <div style="width:22px;height:22px;border-radius:50%;background:${written?'var(--sage-500)':'var(--sage-100)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:${written?'#fff':'var(--muted)'};">${written?'✓':(i+1)}</div>
               <div style="flex:1;font-size:13px;${written?'color:var(--muted);':''}">${p.title}</div>
-              <div style="font-size:11px;color:var(--sage-500);">${written?'':'Write →'}</div>
+              <div style="font-size:11px;color:var(--sage-600);">${written?'':'Write →'}</div>
             </div>`;
           }).join('')}
         </div>
@@ -893,7 +900,7 @@ function renderPromptsList() {
     browseList.innerHTML = Object.values(planData).map(plan => {
       const isJoined = joinedPlans.has(plan.id);
       const { done, total } = getPlanProgress(plan.id);
-      const colorMap = { sage:'var(--sage-600)', bark:'var(--bark-500)', earth:'var(--earth-700)' };
+      const colorMap = { sage:'var(--sage-600)', bark:'var(--bark-700)', earth:'var(--earth-700)' };
       const btnColor = colorMap[plan.color] || 'var(--sage-600)';
       return `<div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="openPlanDetail('${plan.id}')">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
@@ -918,7 +925,7 @@ function renderPromptsList() {
         <div class="prompt-card-content">
           <div class="flex justify-between items-center" style="margin-bottom:8px;">
             <div class="flex gap-sm" style="flex-wrap:wrap;">${p.tags.map(t=>`<span class="badge badge-sage">${t}</span>`).join('')}</div>
-            ${getEntry(p.id) ? '<span style="font-size:12px;color:var(--sage-500);">✓ Written</span>' : ''}
+            ${getEntry(p.id) ? '<span style="font-size:12px;color:var(--sage-600);">✓ Written</span>' : ''}
           </div>
           <h3>${p.title}</h3>
           ${p.quote ? `<p class="muted italic lh" style="font-size:13px;margin-top:8px;">"${p.quote}"</p>` : ''}
@@ -974,7 +981,10 @@ function renderJournal() {
       </div>
       ${e.title ? `<div style="font-weight:600;font-size:14px;margin-bottom:2px;">${e.title}</div>` : ''}
       <p class="clamp3 lh" style="font-size:14px;color:var(--sage-700);">${mdToHtml((e.body||'').slice(0,200))}</p>
-      ${(e.tags&&e.tags.length) ? `<div style="margin-top:4px;">${e.tags.map(t=>`<span class="badge badge-sage">${t}</span>`).join('')}</div>` : ''}
+      <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${(e.tags&&e.tags.length) ? e.tags.map(t=>`<span class="badge badge-sage">${t}</span>`).join('') : ''}
+        ${e.socraticUsed ? `<span class="badge badge-earth" style="font-size:10px;">🧠 Socratic</span>` : ''}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1095,7 +1105,7 @@ function renderComments() {
     ? '<p class="serif muted" style="text-align:center;padding:24px;">Be the first to share a thought.</p>'
     : comments.map(c => `
       <div class="comment-item${c.pinned?' comment-pinned':''}">
-        ${c.pinned ? `<div style="font-size:11px;color:var(--bark-500);font-weight:500;margin-bottom:8px;">📌 ${APP.pinnedByLabel}</div>` : ''}
+        ${c.pinned ? `<div style="font-size:11px;color:var(--bark-700);font-weight:500;margin-bottom:8px;">📌 ${APP.pinnedByLabel}</div>` : ''}
         <div class="flex gap items-start">
           <div class="avatar${c.role==='author'?' avatar-author':''}" style="width:30px;height:30px;font-size:11px;">${c.author.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
           <div class="flex-1">
@@ -1135,6 +1145,7 @@ function toggleCommentLike(id) {
 // ─── JOURNAL EDITOR ─────────────────────────────────────
 function openEditor(promptId, entryId) {
   editorPromptId = promptId || null;
+  editorSocraticUsed = false;
   const existing = entryId ? getEntryById(entryId) : (promptId ? getEntry(promptId) : null);
   editorEntryId = existing ? existing.id : null;
   let p = promptId ? prompts[promptId] : null;
@@ -1155,6 +1166,10 @@ function openEditor(promptId, entryId) {
   document.getElementById('journal-title').value = existing ? (existing.title||'') : '';
   document.getElementById('journal-tags').value = existing ? (existing.tags||[]).join(', ') : '';
   updateWordCount();
+  const isSocratic = isPromptSocratic(promptId);
+  document.getElementById('socratic-ask-btn').style.display = isSocratic ? 'inline-block' : 'none';
+  document.getElementById('socratic-inline-panel').style.display = 'none';
+  document.getElementById('socratic-inline-panel').innerHTML = '';
   document.getElementById('journal-editor').classList.add('open');
   setTimeout(() => document.getElementById('journal-textarea').focus(), 100);
   document.getElementById('journal-textarea').oninput = () => {
@@ -1199,10 +1214,6 @@ function postEditorEntry() {
   updateStatCounts();
 }
 function closeEditor(share) {
-  const wasSocratic = isPromptSocratic(editorPromptId);
-  const socraticPromptId = editorPromptId;
-  const entryBody = document.getElementById('journal-textarea').value.trim();
-
   saveEntry(editorPromptId, editorEntryId, true);
   if (share) {
     // Mark the last saved entry as shared
@@ -1219,10 +1230,6 @@ function closeEditor(share) {
   updateJournalStats();
   updateStatCounts();
   updateHomeContinueSection();
-
-  if (wasSocratic && entryBody && !share) {
-    openSocraticCoach(socraticPromptId, entryBody);
-  }
 }
 
 function saveEntry(promptId, entryId, isFinal) {
@@ -1240,8 +1247,9 @@ function saveEntry(promptId, entryId, isFinal) {
     existing.wordCount = wc;
     existing.relTime = 'just now';
     existing.savedAt = new Date().toISOString();
+    if (editorSocraticUsed) existing.socraticUsed = true;
   } else {
-    const newEntry = { id:'e'+Date.now(), promptId: promptId||null, title, tags, body, wordCount:wc, relTime:'just now', savedAt: new Date().toISOString(), shared: false };
+    const newEntry = { id:'e'+Date.now(), promptId: promptId||null, title, tags, body, wordCount:wc, relTime:'just now', savedAt: new Date().toISOString(), shared: false, socraticUsed: editorSocraticUsed };
     entries.unshift(newEntry);
     editorEntryId = newEntry.id;
   }
@@ -1460,6 +1468,59 @@ function sharePost(id) {
   }
 }
 
+async function submitToSocraticCoach() {
+  const entryText = document.getElementById('journal-textarea').value.trim();
+  if (!entryText) { showToast('Write something first!'); return; }
+
+  const panel = document.getElementById('socratic-inline-panel');
+  const btn = document.getElementById('socratic-ask-btn');
+  panel.style.display = 'block';
+  panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span></div><p class="muted small" style="text-align:center;padding:12px 0;">Thinking…</p>`;
+  btn.disabled = true;
+  btn.textContent = '🧠 Thinking…';
+
+  let promptText = '';
+  for (const plan of Object.values(planData)) {
+    const p = plan.prompts.find(x => x.id === editorPromptId);
+    if (p) { promptText = p.title; break; }
+  }
+
+  try {
+    const res = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ promptText, entryText })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span></div><div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;"><p style="font-size:13px;color:#c0392b;">${data.error || 'Error — try again.'}</p></div>`;
+    } else if (data.questions) {
+      editorSocraticUsed = true;
+      saveEntry(editorPromptId, editorEntryId);
+      const lines = data.questions.split('\n').filter(l => l.trim());
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span><span class="muted small">— revise your response below</span></div>` +
+        lines.map(l => `<div style="background:var(--cream);border:1px solid var(--sage-100);border-radius:12px;padding:12px 14px;margin-bottom:8px;"><p style="font-size:14px;line-height:1.65;color:var(--sage-900);">${l.replace(/^\d+\.\s*/,'')}</p></div>`).join('');
+    } else {
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span></div><p class="muted small" style="text-align:center;">No questions returned — try again.</p>`;
+    }
+  } catch (e) {
+    panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-700);">🧠 Socratic Coach</span></div><div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;"><p style="font-size:13px;color:#c0392b;">${e.message || 'Connection error.'}</p></div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🧠 Ask Coach';
+  }
+}
+
+function shareCurrentPrompt() {
+  const title = document.getElementById('detail-title').textContent || APP.name;
+  const shareData = { title: APP.name, text: title, url: window.location.href };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied!')).catch(() => showToast('Link copied!'));
+  }
+}
+
 function showToast(msg) {
   let t = document.getElementById('app-toast');
   if (!t) {
@@ -1610,6 +1671,7 @@ function restoreEntry(id) {
   localStorage.setItem('twa_archived', JSON.stringify([...archivedEntries]));
   renderJournal();
   renderArchivedEntries();
+  updateJournalStats();
 }
 
 try { (JSON.parse(localStorage.getItem('twa_archived'))||[]).forEach(id=>archivedEntries.add(id)); } catch {}
@@ -1683,7 +1745,7 @@ function renderPlanDetailBody(plan, isJoined) {
             <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px;">${p.tags.slice(0,2).map(t=>`<span class="badge badge-sage">${t}</span>`).join('')}</div>
             <div style="font-size:14px;font-weight:500;color:${written?'var(--muted)':'var(--text)'};">${p.title}</div>
           </div>
-          <div style="font-size:12px;color:var(--sage-500);">${written?'':'→'}</div>
+          <div style="font-size:12px;color:var(--sage-600);">${written?'':'→'}</div>
         </div>
       </div>`;
     }).join('');
