@@ -511,7 +511,8 @@
   <div class="editor-header">
     <button onclick="closeEditor(false)" style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;">← Back</button>
     <span id="save-status" class="muted small" style="opacity:0;transition:opacity .3s;">✓ Saved</span>
-    <div style="display:flex;align-items:center;position:relative;">
+    <div style="display:flex;align-items:center;gap:8px;position:relative;">
+      <button id="socratic-ask-btn" onclick="submitToSocraticCoach()" style="display:none;background:var(--bark-400);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:6px 14px;border-radius:10px;">🧠 Ask Coach</button>
       <button onclick="closeEditor(false)" style="background:var(--sage-600);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;padding:6px 14px 6px 16px;border-radius:10px 0 0 10px;">Done</button>
       <button id="editor-done-arrow" onclick="toggleEditorMenu()" style="background:var(--sage-700);color:#fff;border:none;border-left:1px solid var(--sage-800);cursor:pointer;padding:6px 10px;border-radius:0 10px 10px 0;font-size:11px;">▾</button>
       <div id="editor-done-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--sage-200);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:10;min-width:160px;overflow:hidden;">
@@ -529,6 +530,7 @@
     <input id="journal-title" type="text" placeholder="Title (optional)" style="width:100%;box-sizing:border-box;border:none;border-bottom:1px solid var(--sage-200);background:transparent;font-size:16px;font-weight:600;font-family:'Inter',sans-serif;padding:8px 0;margin-bottom:8px;color:var(--text);outline:none;" />
     <input id="journal-tags" type="text" placeholder="Tags (comma-separated, optional)" style="width:100%;box-sizing:border-box;border:none;border-bottom:1px solid var(--sage-200);background:transparent;font-size:13px;font-family:'Inter',sans-serif;padding:6px 0;margin-bottom:8px;color:var(--text-muted);outline:none;" />
     <textarea id="journal-textarea" placeholder="Begin here. First drafts are just thinking on paper."></textarea>
+    <div id="socratic-inline-panel" style="display:none;margin-top:14px;border-top:1px solid var(--sage-100);padding-top:14px;"></div>
   </div>
   <div class="editor-footer">
     <span class="muted small" id="word-count">0 words</span>
@@ -697,6 +699,7 @@ let currentPromptId = null;
 let saveTimer = null;
 let editorPromptId = null;
 let editorEntryId = null;
+let editorSocraticUsed = false;
 let localComments = { br1: [...(boardComments.br1||[])], br2: [...(boardComments.br2||[])] };
 let likedPosts = {};
 let likedComments = {};
@@ -973,7 +976,10 @@ function renderJournal() {
       </div>
       ${e.title ? `<div style="font-weight:600;font-size:14px;margin-bottom:2px;">${e.title}</div>` : ''}
       <p class="clamp3 lh" style="font-size:14px;color:var(--sage-700);">${mdToHtml((e.body||'').slice(0,200))}</p>
-      ${(e.tags&&e.tags.length) ? `<div style="margin-top:4px;">${e.tags.map(t=>`<span class="badge badge-sage">${t}</span>`).join('')}</div>` : ''}
+      <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
+        ${(e.tags&&e.tags.length) ? e.tags.map(t=>`<span class="badge badge-sage">${t}</span>`).join('') : ''}
+        ${e.socraticUsed ? `<span class="badge badge-earth" style="font-size:10px;">🧠 Socratic</span>` : ''}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1134,6 +1140,7 @@ function toggleCommentLike(id) {
 // ─── JOURNAL EDITOR ─────────────────────────────────────
 function openEditor(promptId, entryId) {
   editorPromptId = promptId || null;
+  editorSocraticUsed = false;
   const existing = entryId ? getEntryById(entryId) : (promptId ? getEntry(promptId) : null);
   editorEntryId = existing ? existing.id : null;
   let p = promptId ? prompts[promptId] : null;
@@ -1154,6 +1161,10 @@ function openEditor(promptId, entryId) {
   document.getElementById('journal-title').value = existing ? (existing.title||'') : '';
   document.getElementById('journal-tags').value = existing ? (existing.tags||[]).join(', ') : '';
   updateWordCount();
+  const isSocratic = isPromptSocratic(promptId);
+  document.getElementById('socratic-ask-btn').style.display = isSocratic ? 'inline-block' : 'none';
+  document.getElementById('socratic-inline-panel').style.display = 'none';
+  document.getElementById('socratic-inline-panel').innerHTML = '';
   document.getElementById('journal-editor').classList.add('open');
   setTimeout(() => document.getElementById('journal-textarea').focus(), 100);
   document.getElementById('journal-textarea').oninput = () => {
@@ -1198,10 +1209,6 @@ function postEditorEntry() {
   updateStatCounts();
 }
 function closeEditor(share) {
-  const wasSocratic = isPromptSocratic(editorPromptId);
-  const socraticPromptId = editorPromptId;
-  const entryBody = document.getElementById('journal-textarea').value.trim();
-
   saveEntry(editorPromptId, editorEntryId, true);
   if (share) {
     // Mark the last saved entry as shared
@@ -1218,10 +1225,6 @@ function closeEditor(share) {
   updateJournalStats();
   updateStatCounts();
   updateHomeContinueSection();
-
-  if (wasSocratic && entryBody && !share) {
-    openSocraticCoach(socraticPromptId, entryBody);
-  }
 }
 
 function saveEntry(promptId, entryId, isFinal) {
@@ -1239,8 +1242,9 @@ function saveEntry(promptId, entryId, isFinal) {
     existing.wordCount = wc;
     existing.relTime = 'just now';
     existing.savedAt = new Date().toISOString();
+    if (editorSocraticUsed) existing.socraticUsed = true;
   } else {
-    const newEntry = { id:'e'+Date.now(), promptId: promptId||null, title, tags, body, wordCount:wc, relTime:'just now', savedAt: new Date().toISOString(), shared: false };
+    const newEntry = { id:'e'+Date.now(), promptId: promptId||null, title, tags, body, wordCount:wc, relTime:'just now', savedAt: new Date().toISOString(), shared: false, socraticUsed: editorSocraticUsed };
     entries.unshift(newEntry);
     editorEntryId = newEntry.id;
   }
@@ -1456,6 +1460,49 @@ function sharePost(id) {
     navigator.share(shareData).catch(() => {});
   } else {
     navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied!')).catch(() => showToast('Link copied!'));
+  }
+}
+
+async function submitToSocraticCoach() {
+  const entryText = document.getElementById('journal-textarea').value.trim();
+  if (!entryText) { showToast('Write something first!'); return; }
+
+  const panel = document.getElementById('socratic-inline-panel');
+  const btn = document.getElementById('socratic-ask-btn');
+  panel.style.display = 'block';
+  panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span></div><p class="muted small" style="text-align:center;padding:12px 0;">Thinking…</p>`;
+  btn.disabled = true;
+  btn.textContent = '🧠 Thinking…';
+
+  let promptText = '';
+  for (const plan of Object.values(planData)) {
+    const p = plan.prompts.find(x => x.id === editorPromptId);
+    if (p) { promptText = p.title; break; }
+  }
+
+  try {
+    const res = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ promptText, entryText })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span></div><div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;"><p style="font-size:13px;color:#c0392b;">${data.error || 'Error — try again.'}</p></div>`;
+    } else if (data.questions) {
+      editorSocraticUsed = true;
+      saveEntry(editorPromptId, editorEntryId);
+      const lines = data.questions.split('\n').filter(l => l.trim());
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span><span class="muted small">— revise your response below</span></div>` +
+        lines.map(l => `<div style="background:var(--cream);border:1px solid var(--sage-100);border-radius:12px;padding:12px 14px;margin-bottom:8px;"><p style="font-size:14px;line-height:1.65;color:var(--sage-900);">${l.replace(/^\d+\.\s*/,'')}</p></div>`).join('');
+    } else {
+      panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span></div><p class="muted small" style="text-align:center;">No questions returned — try again.</p>`;
+    }
+  } catch (e) {
+    panel.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:12px 0;"><span class="label" style="color:var(--bark-500);">🧠 Socratic Coach</span></div><div style="background:#fff3f3;border:1px solid #f5c6c6;border-radius:12px;padding:14px;"><p style="font-size:13px;color:#c0392b;">${e.message || 'Connection error.'}</p></div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🧠 Ask Coach';
   }
 }
 
