@@ -490,8 +490,7 @@
     <div style="background:#fff;border:1px solid var(--sage-100);border-radius:14px;padding:16px;margin-bottom:14px;" id="detail-body"></div>
     <button class="btn btn-primary btn-full" id="detail-write-btn">🪶 Start writing</button>
     <div style="display:flex;gap:10px;margin-top:10px;">
-      <button class="btn btn-secondary flex-1 btn-sm" onclick="alert('Sharing coming soon!')">Share prompt</button>
-      <button class="btn btn-secondary flex-1 btn-sm" onclick="switchDetailTab('board')">Join discussion</button>
+      <button class="btn btn-secondary btn-full btn-sm" onclick="shareCurrentPrompt()">Share prompt</button>
     </div>
   </div>
   <div class="detail-content" id="detail-board-content" style="display:none;">
@@ -1453,6 +1452,16 @@ function sharePost(id) {
   const post = feedPosts.find(p => p.id === id);
   if (!post) return;
   const shareData = { title: APP.name, text: post.text.substring(0, 100), url: window.location.href };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied!')).catch(() => showToast('Link copied!'));
+  }
+}
+
+function shareCurrentPrompt() {
+  const title = document.getElementById('detail-title').textContent || APP.name;
+  const shareData = { title: APP.name, text: title, url: window.location.href };
   if (navigator.share) {
     navigator.share(shareData).catch(() => {});
   } else {
