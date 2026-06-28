@@ -58,31 +58,26 @@ Student data lives entirely in `localStorage` — there is no user database, no 
 
 ---
 
-## Running it locally
+## Trying it
+
+The prototype is deployed on Vercel — visit the live URL to use the app as a student would. No install required; it can be added to an iOS or Android home screen from the browser.
+
+**A note on the AI feature:** The Socratic Coach calls a Vercel serverless function (`/api/gemini`) that proxies to Gemini 2.5 Flash Lite using a server-side API key — the key is never exposed to the client. However, the endpoint currently has no authentication and no rate limiting. It validates only that `promptText` and `entryText` are present. For a single-class prototype with a small audience this is an acceptable tradeoff; adding an auth check or request quota is a prerequisite before a broader pilot.
+
+**Running the E2E test suite:**
 
 ```bash
 git clone https://github.com/ytsmith221/mrs-hudsons-class.git
 cd mrs-hudsons-class
 npm install
-
-# Set your Gemini API key
-export GEMINI_API_KEY=your_key_here
-
-# Serve the app (static)
-npm run serve
-# → http://localhost:3000
-
-# Run E2E tests
 npm test
 ```
-
-The Socratic Coach requires a Vercel deployment (or a local proxy) to route `/api/gemini` requests to the serverless function. Running `npm run serve` alone will serve the app but the AI coach will return a network error when invoked.
 
 ---
 
 ## Known limitations
 
-These are real gaps in the current prototype, documented in `UX_AUDIT.md`:
+These are real gaps in the current prototype, documented in [`docs/UX_AUDIT.md`](docs/UX_AUDIT.md):
 
 - **No persistence layer.** Community comments, likes, and notification dismissals are in-memory only and reset on page reload. A real deployment needs a backend.
 - **Auth is a stub.** Sign-in stores only a name in localStorage. There's no real identity, which means no cross-device sync and no meaningful "your journal is private" guarantee.
