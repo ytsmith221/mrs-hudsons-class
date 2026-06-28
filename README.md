@@ -79,7 +79,7 @@ npm test
 
 ## Known limitations
 
-These are real gaps in the current prototype, documented in [`docs/UX_AUDIT.md`](docs/UX_AUDIT.md):
+These are real gaps in the current prototype:
 
 - **No persistence layer.** Community comments, likes, and notification dismissals are in-memory only and reset on page reload. A real deployment needs a backend.
 - **Auth is a stub.** Sign-in stores only a name in localStorage. There's no real identity, which means no cross-device sync and no meaningful "your journal is private" guarantee.
