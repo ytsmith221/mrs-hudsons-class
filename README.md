@@ -4,7 +4,7 @@ A writing journal built for 9th grade English students — structured around the
 
 The problem it addresses is specific: most student writing tools treat writing as a submission act. A student opens a Google Doc, types until the word count looks right, and submits. There's no structured space between the initial draft and the final version, no mechanism for a teacher to guide reflection at scale, and no accommodation for students who think better by speaking than by typing. Mrs. Hudson's Class is an attempt to redesign that workflow — keeping the teacher in the loop as the author of writing prompts and reading plans, while giving each student a private journal, a progress tracker, and an AI coach that asks follow-up questions rather than generating answers.
 
-The app is a working prototype, currently in development toward a pilot with one class and a longer-term goal of co-creating a scalable tool with teachers, students, schools, and districts.
+The app is a working prototype, currently in development toward a long-term goal of co-creating a scalable tool with teachers, students, schools, and districts.
 
 ---
 
@@ -61,6 +61,8 @@ Student data lives entirely in `localStorage` — there is no user database, no 
 ## Trying it
 
 The prototype is deployed on Vercel — visit the live URL to use the app as a student would. No install required; it can be added to an iOS or Android home screen from the browser.
+
+VERCEL URL: https://mrs-hudsons-class.vercel.app
 
 **A note on the AI feature:** The Socratic Coach calls a Vercel serverless function (`/api/gemini`) that proxies to Gemini 2.5 Flash Lite using a server-side API key — the key is never exposed to the client. However, the endpoint currently has no authentication and no rate limiting. It validates only that `promptText` and `entryText` are present. For a single-class prototype with a small audience this is an acceptable tradeoff; adding an auth check or request quota is a prerequisite before a broader pilot.
 
