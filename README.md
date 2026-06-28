@@ -47,7 +47,7 @@ A later pass caught a WCAG AA color contrast failure across the design system. S
 | API | Vercel serverless function (`api/gemini.js`) |
 | Storage | Browser `localStorage` (client-only; no backend database) |
 | PWA | Service worker with cache-first strategy, Web App Manifest |
-| Testing | Playwright (E2E) |
+| Testing | Playwright — 25 E2E tests covering auth, journaling, prompts, feed, profile, and PWA |
 | Deployment | Vercel |
 
 The single-file architecture was a deliberate tradeoff: zero build tooling means the app deploys from a repo clone with no configuration, runs in any browser without a bundler, and stays readable without a framework mental model. The cost is that the HTML/CSS/JS is monolithic and will need structural decomposition before a multi-teacher version is realistic.
@@ -66,14 +66,6 @@ VERCEL URL: https://mrs-hudsons-class.vercel.app
 
 **A note on the AI feature:** The Socratic Coach calls a Vercel serverless function (`/api/gemini`) that proxies to Gemini 2.5 Flash Lite using a server-side API key — the key is never exposed to the client. However, the endpoint currently has no authentication and no rate limiting. It validates only that `promptText` and `entryText` are present. For a single-class prototype with a small audience this is an acceptable tradeoff; adding an auth check or request quota is a prerequisite before a broader pilot.
 
-**Running the E2E test suite:**
-
-```bash
-git clone https://github.com/ytsmith221/mrs-hudsons-class.git
-cd mrs-hudsons-class
-npm install
-npm test
-```
 
 ---
 
