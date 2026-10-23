@@ -4,7 +4,7 @@ A writing journal built for 9th grade English students — structured around the
 
 The problem it addresses is specific: most student writing tools treat writing as a submission act. A student opens a Google Doc, types until the word count looks right, and submits. There's no structured space between the initial draft and the final version, no mechanism for a teacher to guide reflection at scale, and no accommodation for students who think better by speaking than by typing. Mrs. Hudson's Class is an attempt to redesign that workflow — keeping the teacher in the loop as the author of writing prompts and reading plans, while giving each student a private journal, a progress tracker, and an AI coach that asks follow-up questions rather than generating answers.
 
-The app is a working prototype, currently available at <insert link>.
+The app is a working prototype, currently available at https://mrs-hudsons-class.vercel.app.
 
 ---
 
@@ -85,10 +85,9 @@ These are real gaps in the current prototype:
 
 The near-term roadmap, in rough priority order:
 
-1. **Backend and real auth** — localStorage is the single largest constraint. A lightweight backend (user accounts, journal persistence, real social state) is the prerequisite for a real pilot.
+1. **Backend and real auth** — localStorage is the single largest constraint. A lightweight backend (user accounts, data privacy snd security, journal persistence, real social state) is the prerequisite for a production level student application.
 2. **Teacher admin view** — a teacher needs to see which students have written to each prompt, who's used the Socratic coach, and overall engagement without reading individual entries.
 3. **Voice input** — re-enable `FEATURES.voiceInput` once cross-device reliability is confirmed. The implementation is already in the codebase.
 4. **Multi-class support** — allow a teacher to configure their own reading plans rather than editing the `planData` object directly. This is the architectural shift that moves the product from "one classroom tool" to "a platform."
-5. **Pilot with real students** — co-design iteration with a teacher and class to validate whether the prompt cadence, Socratic coach behavior, and community feed actually change how students write.
 
 The goal is a product that a teacher can hand to a class, confident that it meets students where they are — not a technology solution looking for an education problem to justify it.
