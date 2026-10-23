@@ -1,6 +1,5 @@
 # Mrs. Hudson's Class
 
-**Try it out! **
 https://mrs-hudsons-class.vercel.app
 
 A writing journal built for 9th grade English students — structured around the novels and texts they're actually reading, with an AI layer that pushes their thinking rather than replacing it.
